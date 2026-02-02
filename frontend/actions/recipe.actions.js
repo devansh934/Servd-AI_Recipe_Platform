@@ -7,7 +7,7 @@ import { request } from "@arcjet/next";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337/api/saved-recipes?populate=recipe";
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
 
@@ -498,11 +498,11 @@ export async function getRecipesByPantryIngredients() {
       if (decision.reason.isRateLimit()) {
         throw new Error(
           `Monthly AI recipe limit reached. ${
-            isPro ? "Please contact support." : "Upgrade to Pro!"
+            isPro ? "Please contact support if you need more scans." : "Upgrade to Pro for unlimited scans!"
           }`
         );
       }
-      throw new Error("Request denied");
+      throw new Error("Request denied by security system");
     }
 
     // Get user's pantry items
@@ -559,8 +559,7 @@ Rules:
 - matchPercentage should be 70-100% (how many listed ingredients are used)
 - missingIngredients should be common items or optional additions
 - Sort by matchPercentage descending
-- Make recipes realistic and delicious
-`;
+- Make recipes realistic and delicious`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -588,7 +587,7 @@ Rules:
       message: `Found ${recipeSuggestions.length} recipes you can make!`,
     };
   } catch (error) {
-    console.error("❌ Error in getRecipesByPantryIngredients:", error);
+    console.error("❌ Error in generating recipe suggestions:", error);
     throw new Error(error.message || "Failed to get recipe suggestions");
   }
 }
@@ -597,31 +596,23 @@ Rules:
 export async function getSavedRecipes() {
   try {
     const user = await checkUser();
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+    if (!user) throw new Error("User not authenticated");
 
-    // Fetch saved recipes with populated recipe data
     const response = await fetch(
-      `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&populate[recipe][populate]=*&sort=savedAt:desc`,
+      `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&populate=recipe&sort=savedAt:desc`,
       {
-        headers: {
-          Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-        },
+        headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
         cache: "no-store",
       }
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch saved recipes");
-    }
-
     const data = await response.json();
 
-    // Extract recipes from saved-recipes relations
     const recipes = data.data
-      .map((savedRecipe) => savedRecipe.recipe)
-      .filter(Boolean); // Remove any null recipes
+      .map((saved) => saved.recipe?.data)
+      .filter(Boolean);
+
+    console.log("✅ Saved recipes loaded:", recipes.length);
 
     return {
       success: true,
@@ -629,7 +620,7 @@ export async function getSavedRecipes() {
       count: recipes.length,
     };
   } catch (error) {
-    console.error("Error fetching saved recipes:", error);
+    console.error("❌ Error fetching saved recipes:", error);
     throw new Error(error.message || "Failed to load saved recipes");
   }
 }
