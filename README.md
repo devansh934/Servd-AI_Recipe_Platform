@@ -114,16 +114,32 @@ Then reference them like this in README:
 
 ```
 Servd-AI_Recipe_Platform/
-├── app/                # Next.js App Router
-├── components/         # Reusable UI components
-├── actions/            # Server actions
-├── hooks/              # Custom React hooks
-├── lib/                # Utilities & helpers
-├── public/             # Static assets
-├── screenshots/        # Project screenshots
-├── styles/             # Global styles
-├── .env.example        # Environment variables template
-└── README.md
+├── frontend/                # Next.js Frontend (App Router)
+│   ├── app/                 # Next.js app directory
+│   ├── components/          # Reusable UI components
+│   ├── actions/             # Server actions
+│   ├── hooks/               # Custom React hooks
+│   ├── lib/                 # Utilities & helpers
+│   ├── public/              # Static assets
+│   ├── styles/              # Global styles
+│   ├── .env.example         # Frontend env variables
+│   └── package.json         # Frontend dependencies
+│
+├── backend/                 # Strapi Backend (Headless CMS)
+│   ├── config/              # Strapi configuration
+│   ├── database/            # Migrations & DB setup
+│   ├── src/
+│   │   └── api/             # Strapi APIs
+│   │       ├── recipe/      # Recipe content type & logic
+│   │       ├── pantry-item/ # Pantry items API
+│   │       ├── saved-recipe/# Saved recipes API
+│   │       └── user/        # User-related APIs
+│   ├── .env.example         # Backend env variables
+│   └── README.md            # Backend-specific README
+│
+├── screenshots/             # Project screenshots
+└── README.md                # Main project README
+
 ```
 
 ---
