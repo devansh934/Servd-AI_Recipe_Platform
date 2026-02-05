@@ -17,27 +17,10 @@ Servd  is a modern, full stack AI-powered recipe and pantry management platform 
 
 ## 📸 Screenshots
 
-_Add screenshots here for better presentation._
 
-Create a folder named `screenshots/` in your project root and add images like:
+<img width="1894" height="875" alt="Screenshot 2026-02-05 223059" src="https://github.com/user-attachments/assets/cc046cf9-17ab-48e9-a966-3ae488bbd79b" />
 
-```
-screenshots/
-  ├── home.png
-  ├── pantry.png
-  ├── ai-recipe.png
-  ├── saved-recipes.png
-  └── auth.png
-```
 
-Then reference them like this in README:
-
-```
-![Home Page](./screenshots/home.png)
-![Pantry Dashboard](./screenshots/pantry.png)
-![AI Recipe Generator](./screenshots/ai-recipe.png)
-![Saved Recipes](./screenshots/saved-recipes.png)
-![Authentication](./screenshots/auth.png)
 ```
 
 ---
