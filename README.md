@@ -11,9 +11,10 @@ Servd  is a modern, full stack AI-powered recipe and pantry management platform 
 ## 🌐 Live Preview
 
 🚀 **Live Preview:**  
+
 [Servd-AI_Recipe_Platform-Live Demo](https://servd-ai-recipe-platform.vercel.app)
 
----
+
 
 ## 📸 Screenshots
 
